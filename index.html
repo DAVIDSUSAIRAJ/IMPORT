@@ -137,6 +137,203 @@
         //       dataToExport("Tank sequence Template", ['mappingcode', 'mappedcode',"mappingtype"], expo);   
 
         // END//THIS IS EXPORT
+        //START//THIS IS FOR SCHEDULE WITH EXPORT
+        //         dataToExport(e, sheetName, colHeader, rowdata, schDetails) {
+        //     let excelFileName = sheetName + ".xlsx";
+        //     let blobType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+        //     let cols = colHeader;
+        //     var workbook = new Excel.Workbook();
+        //     let arr = [];
+        //     let newRows = [];
+        //     let newCols = [];
+        //     let obj;
+        //     workbook.creator = 'web';
+        //     workbook.lastModifiedBy = 'web';
+        //     workbook.created = new Date();
+        //     workbook.modified = new Date();
+        //     workbook.addWorksheet(sheetName, {
+        //       views: [{
+        //         state: "frozen",
+        //         activeCell: 'A1',
+        //         showGridLines: true
+        //       }]
+        //     })
+        //     var sheet = workbook.getWorksheet(1);
+        //     if (sheetName === 'Schedule') {
+
+
+        //       for (let i = 0; i < colHeader.length; i++) {
+        //         if (colHeader[i] === 'callId') {
+
+        //         } else {
+        //           newCols.push(colHeader[i])
+
+        //         }
+
+        //       }
+
+        //       for (let i = 0; i < rowdata.length; i++) {
+        //         obj = {
+        //           voyageno: schDetails.voyagefrom,
+        //           portcode: rowdata[i].portcode,
+        //           portname: rowdata[i].portname,
+        //           bound: rowdata[i].bound,
+        //           shortportcode: rowdata[i].shortportcode,
+        //           terminalcode: rowdata[i].terminalcode,
+        //           arrivaldate: rowdata[i].arrivaldate,
+        //           departuredate: rowdata[i].departuredate,
+        //           Portindex: rowdata[i].Portindex,
+        //           currentport: rowdata[i].currentport == "Y" ? "Y":"N",
+        //           portcolor: rowdata[i].portcolor,
+        //           oldindex: rowdata[i].oldindex
+        //         }
+        //         newRows.push(obj);
+        //       }
+        //       // let voyageDet = [];
+        //       sheet.getRow(1).values = ['Schedule Master'];
+        //       // sheet.getRow(3).values = ['Vessel Code', localStorage.getItem('vesselname').split('-')[0], 'Vessel Name',
+        //       //   localStorage.getItem('vesselname').split('-')[1]
+        //       // ]; // DINESH CODE
+        //       let vesselFullName = store.getState().vesselhome.vesname;
+        //       let vesselCode = store.getState().vesselhome.vescode;
+        //       sheet.getRow(3).values = ['Vessel Code', vesselCode, 'Vessel Name',vesselFullName];
+        //       sheet.getRow(4).values = ['Service Code', schDetails.ServiceCode]
+        //       sheet.getRow(5).values = ['Voyage From', schDetails.voyagefrom, 'Voyage To', schDetails.voyageto]
+        //       sheet.getRow(6).values = ['Bound From', schDetails.boundfrom, 'Bound To', schDetails.boundto]
+        //       sheet.getRow(8).values = newCols;
+        //       for (let i = 0; i < newCols.length; i++) {
+        //         arr.push({
+        //           key: newCols[i]
+        //         });
+        //       }
+        //     } else {
+        //       sheet.getRow(1).values = cols;
+        //       for (let i = 0; i < colHeader.length; i++) {
+        //         arr.push({
+        //           key: colHeader[i]
+        //         });
+        //       }
+        //     }
+
+
+
+        //     sheet.columns = arr;
+        //     var colArray = [];
+        //     var headArray = [];
+        //     var l, str;
+        //     for (let i = 0, l = 65; i < colHeader.length; i++, l++) {
+        //       if (colHeader[i] === undefined) {} else {
+        //         if (l >= 91 && l < 97) {
+        //           --i;
+        //         } else if (l >= 97 && l < 123) {
+        //           str = String.fromCharCode(l).toUpperCase();
+        //           colArray.push(str + 3);
+        //           headArray.push(str + 1);
+        //         } else if (l >= 65 && l < 91) {
+        //           str = String.fromCharCode(l);
+        //           colArray.push(str + 3);
+        //           headArray.push(str + 1);
+        //         }
+        //       }
+        //     }
+        //     if (sheetName === 'Schedule') {
+        //       sheet.addRows(newRows);
+        //     } else {
+        //       sheet.addRows(rowdata);
+        //     }
+
+        //     if (sheetName !== 'Schedule') {
+        //       headArray.map(key => {
+        //         sheet.getCell(key).font = {
+        //           name: 'Tahoma',
+        //           family: 2,
+        //           size: 10,
+        //           width: 200,
+        //           bold: true
+        //         };
+        //         sheet.getCell(key).fill = {
+        //           type: 'gradient',
+        //           gradient: 'angle',
+        //           degree: 0,
+        //           stops: [{
+        //               position: 0,
+        //               color: {
+        //                 argb: 'd9f1fa'
+        //               }
+        //             },
+        //             {
+        //               position: 0.5,
+        //               color: {
+        //                 argb: 'd9f1fa'
+        //               }
+        //             },
+        //             {
+        //               position: 0,
+        //               color: {
+        //                 argb: 'd9f1fa'
+        //               }
+        //             }
+        //           ]
+        //         };
+        //         sheet.getCell(key).alignment = {
+        //           wrapText: true,
+        //           vertical: 'middle',
+        //           horizontal: 'center'
+        //         };
+        //         sheet.getCell(key).border = {
+        //           right: {
+        //             style: 'thin'
+        //           },
+        //           top: {
+        //             style: 'thin'
+        //           },
+        //           bottom: {
+        //             style: 'thin'
+        //           },
+        //           left: {
+        //             style: 'thin'
+        //           }
+        //         };
+        //       })
+        //     }
+
+        //     workbook.xlsx.writeBuffer().then(rowdata => {
+        //       var blob = new Blob([rowdata], {
+        //         type: blobType
+        //       });
+        //       FileSaver.saveAs(blob, excelFileName, true);
+        //     });
+        //     this.setState({
+        //       sheet
+        //     });
+        //   }
+
+        // Export Record
+        //     const exportRecord = (e) => {
+
+        //     let servicedetails ={
+        //     "PortCode": "-",
+        //     "Voyage": "-",
+        //     "TerminalCode": "-",
+        //     "ServiceCode": "AT2",
+        //     "vesselCode": "TTX",
+        //     "voyagefrom": "12W03",
+        //     "voyageto": "13W05",
+        //     "boundfrom": "W",
+        //     "boundto": "E",
+        //     "iactiveidx": 0,
+        //     "cycleNo": 1
+        // }
+        //     var Headers = [];
+        //     if (props.headers !== undefined) {
+        //       for (let i = 0; i < props.headers.length; i++) {
+        //         Headers.push(props.headers[i].field);
+        //       }
+        //       new Utilities().dataToExport(e, props.componentName, Headers, props.rowData, servicedetails);
+        //     }
+
+        //   }
+        //END//SCHEDULE WITH EXPORT
     </script>
 </body>
 
