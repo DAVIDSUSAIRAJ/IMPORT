@@ -334,6 +334,519 @@
 
         //   }
         //END//SCHEDULE WITH EXPORT
+
+        //START//UTILITES FILE
+        //         import React, {
+        //   Component
+        // } from "react";
+        // import * as XLSX from 'xlsx';
+        // import FileSaver from 'file-saver';
+        // import * as Excel from "exceljs/dist/exceljs.min.js";
+        // // import Config from '../../../../config';
+        // import Config from "../../../../config"
+        // import { updatePortRowData} from 'app/store/fuse/portSlice';
+        // import store from 'app/store'
+        // import axios from 'axios';
+
+        // class Utilities extends React.Component {
+
+        //   fileUpload(storeData, sheetName,vesselName,PortMasterRowData) {
+        //     let isEmptyCell = false;
+        //     let emptyColumnNo = [];
+        //     let isScheduleEmptyCell = false;
+        //     let ScheduleEmptyColumnNo = [];
+
+        //     var rowData = [];
+        //     let vesDet;
+        //     try {
+        //       let workbook;
+        //       // var rowData = [];
+        //       let data = new Uint8Array(storeData);
+        //       let arr = [];
+        //       for (let i = 0; i !== data.length; ++i) {
+        //         arr[i] = String.fromCharCode(data[i]);
+        //       }
+        //       let bstr = arr.join('');
+        //       workbook = XLSX.read(bstr, {
+        //         type: 'binary'
+        //       });
+        //       let wbook = workbook;
+        //       let first_sheet_name = wbook.SheetNames[0];
+        //       if (sheetName === first_sheet_name) {
+        //         let worksheet = wbook.Sheets[first_sheet_name];
+        //         var ExcelHeaders = XLSX.utils.sheet_to_json(worksheet, {
+        //           header: 1
+        //         })[0];
+        //         var rowIndex = 2;
+
+        //         //START//check, when we import, is first column empty? or not? except schedule
+        //         var excelData = XLSX.utils.sheet_to_json(worksheet, {
+        // 			  header: 0
+        // 	    	});
+        // 	     excelData.forEach((data, index) => {
+        // 			 if (data != undefined) {
+        // 				if (!data.hasOwnProperty(ExcelHeaders[0])) {
+        // 					isEmptyCell = true;
+        //           emptyColumnNo.push(index+2)
+        // 				}
+        // 		  	}
+        // 		   });
+        //        //END//check, when we import, is first column empty? or not? except schedule
+
+        //         if (first_sheet_name === 'Schedule') {
+
+        //         //START//check, when we import, is first column empty? or not?
+        //         var excelData = XLSX.utils.sheet_to_json(worksheet, {
+        //           header: 0
+        //           });
+        //          excelData.forEach((data, index) => {
+        //          if (data != undefined) {
+        //           if (!data.hasOwnProperty(ExcelHeaders[0])) {
+        //             isScheduleEmptyCell = true;
+        //             ScheduleEmptyColumnNo.push(index+4)
+        //           }
+        //           }
+        //          });
+        //          //END//check, when we import, is first column empty? or not?
+
+
+        //           var serviceCode, VoyageFrom, boundFrom, voyageTo, boundTo;
+        //           ExcelHeaders = XLSX.utils.sheet_to_json(worksheet, {
+        //             header: 1
+        //           })[7];
+        //           rowIndex = 9;
+        //           vesDet = {
+        //             vesselCode: XLSX.utils.sheet_to_json(worksheet, {
+        //               header: 1
+        //             })[2][1],
+        //             vesselName : XLSX.utils.sheet_to_json(worksheet, {
+        //               header: 1
+        //             })[2][3],
+        //             serviceCode: XLSX.utils.sheet_to_json(worksheet, {
+        //               header: 1
+        //             })[3][1],
+        //             VoyageFrom: XLSX.utils.sheet_to_json(worksheet, {
+        //               header: 1
+        //             })[4][1],
+        //             boundFrom: XLSX.utils.sheet_to_json(worksheet, {
+        //               header: 1
+        //             })[5][1],
+        //             voyageTo: XLSX.utils.sheet_to_json(worksheet, {
+        //               header: 1
+        //             })[4][3],
+        //             boundTo: XLSX.utils.sheet_to_json(worksheet, {
+        //               header: 1
+        //             })[5][3]
+        //           }
+        //         }
+        //         // port code validation (restrict special character )
+
+        //         let SheetList = ["Terminal Master", "Port Master", "Service Master",] //"Operator Master" import validation working in operatorMasters.js
+        //         if (SheetList.includes(sheetName)) {
+
+        //           let alertDetails, stringValidation, stringLength = [],alertMessage = [],errorRow = []
+
+        //           let A1 = worksheet['A1'].w
+
+        //           let checkString = (cellName, rowIndexStart, rowIndexEnd, headerName) => {
+
+        //             stringValidation = []
+        //             errorRow = []
+        //             stringLength=[]
+        //             var strings = /[^A-Z\s()]/;
+        //              let hasSpecialCharacters =  /[!@#^&*()?%{}+=<>;:.,_|`\\$'"/\s/\[\]]/;
+
+        //             while (worksheet[cellName + rowIndexStart]) {
+        //               let hasSpecialChar_minus = worksheet[cellName + rowIndexStart].w.split("").includes("-");
+        //               if ((worksheet[cellName + rowIndexStart].w.match(hasSpecialCharacters)) || hasSpecialChar_minus) { 
+
+        //                 errorRow.push(rowIndexStart)
+
+        //                 alertDetails = "Row No: " + errorRow.toString() + " - " + (worksheet[cellName + (headerName - 1)].w).toUpperCase() + " Only accept alphaNumeric(A-Z|0-9)"
+
+        //               }
+
+
+        //               if (cellName == "A" && A1 == "portcode") { //validate port code has min 1 and max 5 char
+
+        //                 (worksheet[cellName + rowIndexStart].w).length >= 6 && stringLength.push(rowIndexStart)
+
+        //                 stringValidation = "Row No: " + stringLength.toString() + " - " + (worksheet[cellName + (headerName - 1)].w).toUpperCase() + " should be maximum 5 charecter"
+        //               }
+
+        //               if (rowIndexStart == rowIndexEnd) {
+        //                 break
+        //               }
+        //               rowIndexStart++;
+        //             }
+
+        //             errorRow.length && alertMessage.push(alertDetails)
+        //             stringLength.length>0 && alertMessage.push(stringValidation)
+
+        //           }
+
+        //           if (A1 == "portcode" || A1 == "operatorcode" || A1 == "servicecode") {
+        //             checkString("A", 2, 300, 2)
+        //           }
+
+        //           if (worksheet['B1'].w == "terminalcode") {
+        //             checkString("B", 2, 300, 2)
+        //           }
+
+        //           // is mandaterey excel columns are empty?
+
+        //           let column1 = []
+        //           let column2 = []
+        //           let column3 = []
+        //           let c4 =[]
+
+        //           let column1ValidationMessage, column2ValidationMessage, column3ValidationMessage, portcodevalidation
+
+        //           let emptyCellCheck = () => {
+
+        //             let portCodeData= []
+
+        //             var excelData = XLSX.utils.sheet_to_json(worksheet, {
+        //               header: 0
+        //             });
+
+        //               excelData.map( async  (data, index) =>  {
+        //                if (data != undefined)  {
+
+        //                 // formate display message
+        //                 let a = ExcelHeaders[0].slice(0, ExcelHeaders[0].length - 4) + " " + ExcelHeaders[0].slice(ExcelHeaders[0].length - 4, ExcelHeaders[0].length)
+        //                 let b = ExcelHeaders[1].slice(0, ExcelHeaders[1].length - 4) + " " + ExcelHeaders[1].slice(ExcelHeaders[1].length - 4, ExcelHeaders[1].length)
+
+        //                 //check excel cell is empty or not
+        //                 if (!(data.hasOwnProperty(ExcelHeaders[0]))) {
+
+        //                   column1.push(index + 2)
+        //                   column1ValidationMessage = "Row No: " + column1.toString() + " - " + a.toUpperCase() + " can't be empty"
+
+        //                 }
+
+        //                 if (!(data.hasOwnProperty(ExcelHeaders[1]))) {
+
+        //                   column2.push(index + 2)
+        //                   column2ValidationMessage = "Row No: " + column2.toString() + " - " + b.toUpperCase() + " can't be empty"
+
+        //                 }
+
+        //                 if (sheetName == "Terminal Master" && !(data.hasOwnProperty(ExcelHeaders[2]))) {
+
+        //                   column3.push(index + 2)
+        //                   let c = ExcelHeaders[2].slice(0, ExcelHeaders[2].length - 4) + " " + ExcelHeaders[2].slice(ExcelHeaders[2].length - 4, ExcelHeaders[2].length)
+        //                   column3ValidationMessage = "Row No: " + column3.toString() + " - " + c.toUpperCase() + " can't be empty"
+
+        //                 }
+
+        //                 //check port code exist in port Master
+        //                 if(sheetName == "Terminal Master" && data.hasOwnProperty("portcode")){
+
+        //                   PortMasterRowData.map((data)=>{portCodeData.push(data.portcode)})
+
+        //                   if (!(portCodeData.includes(data.portcode.toUpperCase()))) {
+
+        //                     c4.push(index + 2)
+        //                     portcodevalidation = "Row No: " + c4.toString() + " - " + "PORT CODE not found in Port Master"
+
+
+
+
+
+
+        //                   }
+        //                 }
+        //                 if((sheetName == "Dictionary_Port" && data.hasOwnProperty("mappedcode"))){
+
+        //                   PortMasterRowData.map((data)=>{portCodeData.push(data.portcode)})
+
+        //                   if (!(portCodeData.includes(data.mappedcode))) {
+
+        //                     c4.push(index + 2)
+        //                     portcodevalidation = "Row No: " + c4.toString() + " - " + "PORT CODE not found in Port Master"
+
+        //                   }
+
+        //                 }            
+        //                }
+        //             })
+        //             column1.length>0 && alertMessage.push(column1ValidationMessage)
+        //             column2.length &&  alertMessage.unshift(column2ValidationMessage)
+        //             column3.length && alertMessage.unshift(column3ValidationMessage)
+        //             c4.length && alertMessage.unshift(portcodevalidation)
+        //           }
+
+        //             emptyCellCheck()
+
+        //           if (alertMessage.length) { // Display validation details
+        //             return alertMessage
+        //           }
+        //         }
+        //         // console.log(vesDet);
+        //         var htHeaders = new Map();
+        //         var headerKeys = [];
+        //         var l, str;
+        //         for (let i = 0, l = 65; i < ExcelHeaders.length; i++, l++) {
+        //           if (ExcelHeaders[i] === undefined) {} else {
+        //             if (l >= 91 && l < 97) {
+        //               --i;
+        //             } else if (l >= 97 && l < 123) {
+        //               str = "A" + String.fromCharCode(l).toUpperCase();
+        //               htHeaders.set(str, ExcelHeaders[i]);
+        //               headerKeys.push(str);
+        //             } else if (l >= 65 && l < 91) {
+        //               str = String.fromCharCode(l);
+        //               htHeaders.set(str, ExcelHeaders[i]);
+        //               headerKeys.push(str);
+        //             }
+        //           }
+        //         }
+
+        //         while (worksheet['A' + rowIndex]) {
+        //           let row = {};
+        //           for (let i = 0; i < headerKeys.length; i++) {
+        //             if (worksheet[headerKeys[i] + rowIndex] === undefined) {} else {
+        //               row[htHeaders.get(headerKeys[i])] = worksheet[headerKeys[i] + rowIndex] ? worksheet[headerKeys[i] + rowIndex].w : "";
+        //             }
+        //           }
+        //           rowIndex++;
+        //           rowData.push(row);
+        //         }
+        //         if (first_sheet_name === 'Schedule') {
+        //           rowData.push(vesDet);
+        //         }
+        //         if(isEmptyCell && first_sheet_name !== 'Schedule') return [`Row No.${emptyColumnNo} ${ExcelHeaders[0]} can't be empty.`]
+        //         if(isScheduleEmptyCell && first_sheet_name === 'Schedule') return [`Row No.${ScheduleEmptyColumnNo} ${ExcelHeaders[0]} can't be empty.`]
+
+
+
+        //         return rowData;
+        //       } else {
+        //         alert("Sheet name should be" + " " + sheetName);
+        //       }
+        //     } catch (e) {
+        //       if (e instanceof Error) {
+        //         console.log("The exception in fileUpload Method" + e.message);
+        //         console.log(e.stack);
+        //       }
+
+        //       return false;
+        //     }
+
+        //   }
+
+        //   dataToExport(e, sheetName, colHeader, rowdata, schDetails) {
+        //     console.log(e, sheetName, colHeader, rowdata, schDetails)
+        //     let excelFileName = sheetName + ".xlsx";
+        //     let blobType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
+        //     let cols = colHeader;
+        //     var workbook = new Excel.Workbook();
+        //     let arr = [];
+        //     let newRows = [];
+        //     let newCols = [];
+        //     let obj;
+        //     workbook.creator = 'web';
+        //     workbook.lastModifiedBy = 'web';
+        //     workbook.created = new Date();
+        //     workbook.modified = new Date();
+        //     workbook.addWorksheet(sheetName, {
+        //       views: [{
+        //         state: "frozen",
+        //         activeCell: 'A1',
+        //         showGridLines: true
+        //       }]
+        //     })
+        //     var sheet = workbook.getWorksheet(1);
+        //     if (sheetName === 'Schedule') {
+
+
+        //       for (let i = 0; i < colHeader.length; i++) {
+        //         if (colHeader[i] === 'callId') {
+
+        //         } else {
+        //           newCols.push(colHeader[i])
+
+        //         }
+
+        //       }
+
+        //       for (let i = 0; i < rowdata.length; i++) {
+        //         obj = {
+        //           voyageno: schDetails.voyagefrom,
+        //           portcode: rowdata[i].portcode,
+        //           portname: rowdata[i].portname,
+        //           bound: rowdata[i].bound,
+        //           shortportcode: rowdata[i].shortportcode,
+        //           terminalcode: rowdata[i].terminalcode,
+        //           arrivaldate: rowdata[i].arrivaldate,
+        //           departuredate: rowdata[i].departuredate,
+        //           Portindex: rowdata[i].Portindex,
+        //           currentport: rowdata[i].currentport == "Y" ? "Y":"N",
+        //           portcolor: rowdata[i].portcolor,
+        //           oldindex: rowdata[i].oldindex
+        //         }
+        //         newRows.push(obj);
+        //       }
+        //       // let voyageDet = [];
+        //       sheet.getRow(1).values = ['Schedule Master'];
+        //       // sheet.getRow(3).values = ['Vessel Code', localStorage.getItem('vesselname').split('-')[0], 'Vessel Name',
+        //       //   localStorage.getItem('vesselname').split('-')[1]
+        //       // ]; // DINESH CODE
+        //       let vesselFullName = store.getState().vesselhome.vesname;
+        //       let vesselCode = store.getState().vesselhome.vescode;
+        //       sheet.getRow(3).values = ['Vessel Code', vesselCode, 'Vessel Name',vesselFullName];
+        //       sheet.getRow(4).values = ['Service Code', schDetails.ServiceCode]
+        //       sheet.getRow(5).values = ['Voyage From', schDetails.voyagefrom, 'Voyage To', schDetails.voyageto]
+        //       sheet.getRow(6).values = ['Bound From', schDetails.boundfrom, 'Bound To', schDetails.boundto]
+        //       sheet.getRow(8).values = newCols;
+        //       for (let i = 0; i < newCols.length; i++) {
+        //         arr.push({
+        //           key: newCols[i]
+        //         });
+        //       }
+        //     } else {
+        //       sheet.getRow(1).values = cols;
+        //       for (let i = 0; i < colHeader.length; i++) {
+        //         arr.push({
+        //           key: colHeader[i]
+        //         });
+        //       }
+        //     }
+
+
+
+        //     sheet.columns = arr;
+        //     var colArray = [];
+        //     var headArray = [];
+        //     var l, str;
+        //     for (let i = 0, l = 65; i < colHeader.length; i++, l++) {
+        //       if (colHeader[i] === undefined) {} else {
+        //         if (l >= 91 && l < 97) {
+        //           --i;
+        //         } else if (l >= 97 && l < 123) {
+        //           str = String.fromCharCode(l).toUpperCase();
+        //           colArray.push(str + 3);
+        //           headArray.push(str + 1);
+        //         } else if (l >= 65 && l < 91) {
+        //           str = String.fromCharCode(l);
+        //           colArray.push(str + 3);
+        //           headArray.push(str + 1);
+        //         }
+        //       }
+        //     }
+        //     if (sheetName === 'Schedule') {
+        //       sheet.addRows(newRows);
+        //     } else {
+        //       sheet.addRows(rowdata);
+        //     }
+
+        //     if (sheetName !== 'Schedule') {
+        //       headArray.map(key => {
+        //         sheet.getCell(key).font = {
+        //           name: 'Tahoma',
+        //           family: 2,
+        //           size: 10,
+        //           width: 200,
+        //           bold: true
+        //         };
+        //         sheet.getCell(key).fill = {
+        //           type: 'gradient',
+        //           gradient: 'angle',
+        //           degree: 0,
+        //           stops: [{
+        //               position: 0,
+        //               color: {
+        //                 argb: 'd9f1fa'
+        //               }
+        //             },
+        //             {
+        //               position: 0.5,
+        //               color: {
+        //                 argb: 'd9f1fa'
+        //               }
+        //             },
+        //             {
+        //               position: 0,
+        //               color: {
+        //                 argb: 'd9f1fa'
+        //               }
+        //             }
+        //           ]
+        //         };
+        //         sheet.getCell(key).alignment = {
+        //           wrapText: true,
+        //           vertical: 'middle',
+        //           horizontal: 'center'
+        //         };
+        //         sheet.getCell(key).border = {
+        //           right: {
+        //             style: 'thin'
+        //           },
+        //           top: {
+        //             style: 'thin'
+        //           },
+        //           bottom: {
+        //             style: 'thin'
+        //           },
+        //           left: {
+        //             style: 'thin'
+        //           }
+        //         };
+        //       })
+        //     }
+
+        //     workbook.xlsx.writeBuffer().then(rowdata => {
+        //       var blob = new Blob([rowdata], {
+        //         type: blobType
+        //       });
+        //       FileSaver.saveAs(blob, excelFileName, true);
+        //     });
+        //     this.setState({
+        //       sheet
+        //     });
+        //   }
+
+
+        // }
+        // export default Utilities;
+
+        //START//THIS IS TOOLBAR FILE
+        //   // Import File
+        //   const importRecord = (e) => {
+        //     if (props.componentName !== undefined) {
+        //       let file = File;
+        //       let files = e.target.files;
+        //       var extension = files[0].name.substring(files[0].name.lastIndexOf("."), files[0].name.length);
+        //       if (extension.toLowerCase() === ".xls" || extension.toLowerCase() === ".xlsx" || extension.toLowerCase() === ".csv") {
+        //         file = e.target.files[0];
+        //         if (typeof (document.getElementById("filename")) != 'undefined' && document.getElementById("filename") != null) {
+        //           document.getElementById("filename").value = file.name;
+        //         }
+        //         let readFile = new FileReader();
+        //         readFile.readAsArrayBuffer(file);
+        //         readFile.onload = () => {
+        //           let storeData = readFile.result;
+        //           var data = new Utilities().fileUpload(storeData, props.componentName, props.vesselName,props.PortMasterRowData);
+        //         data && props.upload(data, props.componentName);
+        //         }
+        //       }
+        //     }
+        //   };
+
+        //   // Export Record
+        //   const exportRecord = (e) => {
+        //     var Headers = [];
+        //     if (props.headers !== undefined) {
+        //       for (let i = 0; i < props.headers.length; i++) {
+        //         Headers.push(props.headers[i].field);
+        //       }
+        //       new Utilities().dataToExport(e, props.componentName, Headers, props.rowData, props.servicedetails);
+        //     }
+
+        //   }
+        //END//THIS IS TOOLBAR FILE
+        //END//UTILITES FILE
     </script>
 </body>
 
